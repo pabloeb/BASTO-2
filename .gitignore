@@ -1,0 +1,8 @@
+*.bak
+*.zip
+*.rar
+*.tar.gz
+*.log
+/temp
+/tmp
+__pycache__/

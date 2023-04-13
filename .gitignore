@@ -6,5 +6,5 @@
 /temp
 /tmp
 __pycache__/
-.csv
-.ipynb
+*.csv
+*.ipynb

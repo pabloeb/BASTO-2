@@ -194,7 +194,7 @@ Y eso es todo! Esperamos hayan disfrutado el recorrido.
 
 Bastó Ganado Inteligente
 
-* Visitar sitio web [AQUÍ](https://www.xn--bast-tqa.com.ar/![image "AQUÍ")
+#Visitar sitio web [AQUÍ](https://www.xn--bast-tqa.com.ar/ "AQUÍ")
 
 * Visitar Linkedin [AQUÍ](https://www.linkedin.com/in/bast%C3%B3ganadointeligente/?originalSubdomain=ar![image] "AQUÍ")
 

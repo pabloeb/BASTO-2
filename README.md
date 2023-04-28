@@ -203,6 +203,6 @@ Y eso es todo! Esperamos hayan disfrutado el recorrido.
 
 ### Agradecimientos:
 
-* Al staff de Henry Labs por habernos permitido realizar nuestro proyecto final trabajando para una empresa real. Y también agradecer a nuestro HM Jonathan Deiloff, siempre presente para brindar una opinión y/o colaborar con su ayuda.
+* Al staff de Henry Labs por habernos permitido realizar nuestro proyecto final trabajando para una empresa real. Especialmente a aquellos con quienes tuvimos má contacto: Pablo Romero y nuestro HM Jonathan Deiloff, siempre presente para brindar una opinión y/o colaborar con su ayuda.
 
 * A todo el equipo de Bastó Ganado Inteligente, por su asistencia, seguimiento y buena onda siempre. Fue un placer haber trabajado con uds y ojalá podamos darle continuidad de alguna forma.

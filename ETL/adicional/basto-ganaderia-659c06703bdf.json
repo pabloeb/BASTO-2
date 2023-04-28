@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "basto-ganaderia",
+  "private_key_id": "659c06703bdf791c775e6806ebae682a6396682d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDn0/LEIYgXK8l/\nSVStYoZZFtGWsNmX157lYyvux+Kh3S17erHVyUFbhYFRLJ/kx+nyTRRSt7aCYc1l\nJbDYOe17tTYh0RoU9nut9nnOiqv3CwlrSdsIZEXKUtN70FHoFu6rg2p0cJk6jKkA\nxxpgr91PA4EJfxMOQ8+ymQZ6sZiCte2Yo5Bg32o1GhnBsZ9lZs5mZELNj3i274Yv\n/cSk30qs5gx/i8RnIz8Vb16ajRSn7u/X23aWCo6V1RO7tjg85NXwt4Nr6uUz4fYe\ntBNCoLAHw5VV0vJOCe9nTNHjl1I44RLqAGetCil62LKUXff45zDBhIVxCJ0qofNR\nK+tvBmLDAgMBAAECggEAIhDiG/IKy8+HuihDb4Bf2kLhJNyd95McFVHKXeSKKAZB\nWGNs3cvHdTRxY+/ucFxJbhfnhEmHYdy5+u1b8ZopjJknTYwq4f5fqZjjc0yrUmUR\nIEPnvMbx/nYcqkAFboPC1KSTWxhEsUwuysoh1SgNRD7Gkmeq8YNYx5d2/UaQRlHq\nmTPPPaWzjV4SBz0U1q+6Mk36I4IQrOIel4KMxqU+hZcQA5foXJT3JqvtohcySLo8\nj4FSbo+XIDLaJz0bzZEfQt6W/W+zgRKa+5RERpNiIL+UPhsQZ1WtaVW9DKA+xOdc\nBlBBDs/PPTwjT70+bxo1YUsaV6guIjQnjiEj3KUAYQKBgQD4IDfksfdrFJPC1bz0\nSpKe3Sh9+rhNOt0X8A2rT5u5xyIEG7kVM6g9kR8Y0hhZVklVPvd1oxcMqhgWLeY7\nDmaAG+4ic32hPswoIkfYK9KuLuDQV6lvlu8gDRlRFNJbanA2HJIgMw5hTIAw66Up\nAAp+upBK0J3eciGKBU5w8WbiMQKBgQDvL1M6uKed7huCz3KEfsYFLh8FbJ/tGviP\n3C/jyBCqI0M0uKQ6WS8KLLr8LNPsVJ6B7S/6iW9kHlEZiMN+eHviqFXjwagxJJFZ\nvnOyD0Fki5CKabmnp5HGMJqrTb86vSihY9iJukXXBZfkQel1gyDJky64d24pebJi\nYJcLIfzDMwKBgQDhwga4+UgB0MYklu6GYzeGffjyruVzt2Qk/JCjVxp8bPfBPywm\nY0rnQZxGrBnlZwHwIwtqqEo3hqfFvltlTlPqqf8Ar44V4RpGRfKSeEUHoLWCOtB6\nLJ1Dz0dCo6xF6tFQGqzFyU6DLuTQHge3B0eFSOAygh+xnqxvdSaK0snmcQKBgE1t\nNXUZ13DBZnh27OxFGZcNsg8QdcjMZVA0h/AlkHdzCMtlRgx5WEfj6Pe/Dy8+yTzn\n6hMhMETpp3krk5U6LWhW887Rnr+hxceWZl9qntGMeFLGHMpP7VmJ3Fe9yDychS2R\nY8RZ30fW0K+cQpW+x/tYwNQIHUoh0gQUnnCFJQyPAoGALLfr8P1OJ9rTD+VjwL0L\nfWlbSNbK+Y/Y+x1qbC9ySQ1OyYTNqIhcGaq9NkzrlHKKzF+xzXIP27kwbpggzbTM\nfjzc7TbSkxs2BNM2CrdD3V4yKVu6bQozLjPXZraUeUxz5YIihhs2612zqj058deL\nTwJdj/FW19xkWOJ34NNAJrQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "basto-ganaderia@basto-ganaderia.iam.gserviceaccount.com",
+  "client_id": "106594627560545567328",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/basto-ganaderia%40basto-ganaderia.iam.gserviceaccount.com"
+}

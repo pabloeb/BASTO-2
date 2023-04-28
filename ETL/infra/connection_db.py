@@ -1,7 +1,7 @@
 # MODULO DE CONEXIONES A LA BASE
 
 import pandas as pd
-
+import os
 from pymongo import MongoClient # instalar pymongo
 
 def read_mongo(collection, query={}):
@@ -20,6 +20,16 @@ def read_mongo(collection, query={}):
     conn.close()
     return df   # Read from Mongo and Store into DataFrame 
  
+#def save_tranformation(df, name):
+#    """ save df to transformations folder with name assigned"""
+#    df.to_csv(f'transformations/{name}.csv',index=False)
+
 def save_tranformation(df, name):
     """ save df to transformations folder with name assigned"""
-    df.to_csv(f'transformations/{name}.csv',index=False)
+    # Verifica si la carpeta transformations existe
+    if not os.path.exists('transformations'):
+        # Si no existe, crea la carpeta
+        os.makedirs('transformations')
+        
+    # Guarda el archivo en la carpeta transformations
+    df.to_csv(f'transformations/{name}.csv', index=False)

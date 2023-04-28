@@ -1,25 +1,16 @@
-
+from .conexiones import bson_to_dataframe
 import bson
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 
-############# REMOVE ##############
+
 def read_ith():
-    """reading ith table from database"""
-    file_ith = "../../../dump/test/settlementithcounts.bson"
-    with open(file_ith, 'rb') as f:
-        data_ith = bson.decode_all(f.read())
-    df_ith = pd.DataFrame(data_ith)
+    df_ith = bson_to_dataframe('settlementithcounts.bson')
     return df_ith
 
 def read_settlements():
-    """reading settlements table from database"""
-    file_settlements = "../../../dump/test/settlements.bson"
-    with open(file_settlements, 'rb') as f:
-        data_settlements = bson.decode_all(f.read())
-    df_settlements = pd.DataFrame(data_settlements)
+    df_settlements = bson_to_dataframe('settlements.bson')
     return df_settlements
-####################################
 
 def get_clean_ith():
     """get ith table and drop nulls"""

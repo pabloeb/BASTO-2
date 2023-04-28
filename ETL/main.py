@@ -136,13 +136,12 @@ df_tablahechos_final = pd.concat([df_tablahechos_parcial, resultado_final_UUIDvi
 # Se cambian los formatos de fecha para poder ordenar por Fecha, Hora o Datetime
 df_tablahechos_final['Fecha'] = pd.to_datetime(df_tablahechos_final['Fecha'])
 df_tablahechos_final['Fecha'] = df_tablahechos_final['Fecha'].dt.date
-df_tablahechos_final['Datetime'] = pd.to_datetime(df_tablahechos_final['Datetime'])
+#df_tablahechos_final['Datetime'] = pd.to_datetime(df_tablahechos_final['Datetime'])
 df_tablahechos_final['Hora'] = df_tablahechos_final['Hora'].astype(str)
-
 df_tablahechos_final = df_tablahechos_final.reset_index(drop=True)
 
 # Guardar en CSV
-save_tranformation(df_tablahechos_final, 'tabla_hechos_final.csv')
+save_tranformation(df_tablahechos_final, 'tabla_hechos_final')
 
 print("------- TERMINA CODIGO DE GENERACION tabla_hechos_final -------")
 print('')
@@ -155,7 +154,7 @@ print("------- COMIENZA CODIGO DE GENERACION 'cantidad_ganado' -------")
 df_cantidad_ganado = cantidad_ganado (df_tablahechos_final)
 
 # Guardar en CSV
-save_tranformation(df_cantidad_ganado, 'cantidad_ganado.csv')
+save_tranformation(df_cantidad_ganado, 'cantidad_ganado')
 
 print("------- TERMINA CODIGO DE GENERACION 'cantidad_ganado' -------")
 print('')
@@ -179,7 +178,7 @@ df_UUID_nocturno = df_UUID_nocturno.sort_values(['UUID', 'Fecha', 'Hora'], ascen
 df_distancias_recorridas = distancia_diaria(df_UUID_diurno, df_UUID_nocturno)
 
 # Se guarda la tabla
-save_tranformation(df_distancias_recorridas, 'distancias_recorridas.csv') 
+save_tranformation(df_distancias_recorridas, 'distancias_recorridas') 
 
 print("------- TERMINA CODIGO DE GENERACION 'distancias_recorridas' -------")
 print('')

@@ -407,14 +407,11 @@ def interpolate_points(p1, p2):
      # Calculamos la diferencia de tiempo en minutos
     delta_t = (p2['datetime'] - p1['datetime']).total_seconds() / 60.0
 
-    tiempo_max = 480            # <---------------------------- La variable tiempo_max fija el tiempo maximo entre dos mediciones consecutivas
-                                                                # para las que se puede calcular puntos virtuales intermedios (en minutos)
-
     # Cuando el intervalo entre 2 mediciones es menor al intervalo seleccionado para generar los puntos vituales, la función no devuelve nada
     # El código a continuación fueza esa circunstancia en el caso que delta_t sea nula (dos mediciones consecutivas del mismo device en el mismo momento = duplicados ==> no genera resultado y sigue iterando), o que delta_t sea mayor al tiempo máximo estipulado para generar los puntos virtuales, o que sean de dias diferentes.
-    if delta_t == 0 or delta_t > tiempo_max or (p1['datetime'].date() != p2['datetime'].date()):
-    #if delta_t == 0 or (p1['datetime'].date() != p2['datetime'].date()):
-        intervalo = intervalo -1
+
+    if delta_t == 0 or (p1['datetime'].date() != p2['datetime'].date()):
+        intervalo = intervalo - 1
         delta_t = 1
 
 

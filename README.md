@@ -193,7 +193,7 @@ Y eso es todo! Esperamos hayan disfrutado el recorrido.
 
 -------
 
-Bastó Ganado Inteligente
+Bastó Ganado Inteligente:
 
 * Visitar sitio web [AQUÍ](https://www.xn--bast-tqa.com.ar/ "AQUÍ")
 

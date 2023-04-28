@@ -193,7 +193,7 @@ Y eso es todo! Esperamos hayan disfrutado el recorrido.
 
 -------
 
-Bastó Ganado Inteligente:
+### Bastó Ganado Inteligente:
 
 * Visitar sitio web [AQUÍ](https://www.xn--bast-tqa.com.ar/ "AQUÍ")
 
@@ -201,7 +201,7 @@ Bastó Ganado Inteligente:
 
 -------
 
-## Agradecimientos:
+### Agradecimientos:
 
 * Al staff de Henry Labs por habernos permitido realizar nuestro proyecto final trabajando para una empresa real. Y también agradecer a nuestro HM Jonathan Deiloff, siempre presente para brindar una opinión y/o colaborar con su ayuda.
 

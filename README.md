@@ -124,7 +124,7 @@ Se interactuó con Github de manera colaborativa durante todo el proceso de trab
 
 ![Captura de pantalla 2023-04-28 a las 02 45 18](https://user-images.githubusercontent.com/110254796/235064505-111f373e-90d0-4444-92d2-7c12c214616a.jpg)
 
-3- Etapas del trabajo:
+## 3- Etapas del trabajo:
 
 -	En python:
 

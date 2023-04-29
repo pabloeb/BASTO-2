@@ -207,3 +207,8 @@ Y eso es todo! Esperamos hayan disfrutado el recorrido.
 
 * A todo el equipo de Bastó Ganado Inteligente, por su asistencia, seguimiento y buena onda siempre. Fue un placer haber trabajado con uds y ojalá podamos darle continuidad de alguna forma.
 
+-------
+
+### Notas:
+* Con el fin de mejorar la calidad de datos de los datasets que nos proveyó el equipo de Bastó adjuntamos un informe de calidad de datos con observaciones que creemos deben tenerse en cuenta, y además añadimos un diccionario de datos con los términos que creemos más importantes para la comprensión de los datasets.
+

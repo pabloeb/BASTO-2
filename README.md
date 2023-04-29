@@ -207,7 +207,3 @@ Y eso es todo! Esperamos hayan disfrutado el recorrido.
 
 * A todo el equipo de Bastó Ganado Inteligente, por su asistencia, seguimiento y buena onda siempre. Fue un placer haber trabajado con uds y ojalá podamos darle continuidad de alguna forma.
 
--------
-
-![image](https://user-images.githubusercontent.com/110254796/235273381-a779bbbd-a06e-41c2-a79a-ddea90e0a34c.png)
-

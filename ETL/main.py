@@ -1,22 +1,13 @@
-from infra.connection_db import save_tranformation, read_mongo
+from infrastructure.conexiones import *
+
 from importlib import reload
-import helpers.datarowdata_transfo # cargamos modulo
-reload(helpers.datarowdata_transfo) # recargar modulo si cambian sus funciones
-from helpers.datarowdata_transfo import flat_datarows #importamos sus funciones
+
 import helpers.ith_transfo
 reload(helpers.ith_transfo)
 from helpers.ith_transfo import get_ith_with_settlements_names_and_flags
 
 from helpers.funciones import *
-from helpers.conexiones import *
 import pandas as pd
-import numpy as np
-import math
-import random
-from datetime import datetime, timedelta
-import folium
-from folium.plugins import HeatMap
-from geopy.distance import geodesic             # cálculo de distancia entre coordenadas
 
 
 print('=======>> SE EXTRAEN LOS ARCHIVOS .bson DE GOOGLE DRIVE Y SE CONVIERTEN A DATAFRAME')

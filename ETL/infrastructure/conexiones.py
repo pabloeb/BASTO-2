@@ -41,3 +41,13 @@ def bson_to_dataframe(file_name):
 
                 return df
 
+
+def save_tranformation(df, name):
+    """ save df to transformations folder with name assigned"""
+    # Verifica si la carpeta transformations existe
+    if not os.path.exists('transformations'):
+        # Si no existe, crea la carpeta
+        os.makedirs('transformations')
+        
+    # Guarda el archivo en la carpeta transformations
+    df.to_csv(f'transformations/{name}.csv', index=False)

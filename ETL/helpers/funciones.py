@@ -4,9 +4,6 @@ import re
 import math
 import random
 from datetime import datetime, timedelta
-import folium
-from folium.plugins import HeatMap
-from geopy.distance import geodesic             # cálculo de distancia entre coordenadas
 from geopy.distance import distance
 
 

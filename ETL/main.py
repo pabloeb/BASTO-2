@@ -19,7 +19,7 @@ from folium.plugins import HeatMap
 from geopy.distance import geodesic             # cálculo de distancia entre coordenadas
 
 
-print('------- SE EXTRAEN LOS ARCHIVOS .bson DE GOOGLE DRIVE Y SE CONVIERTEN A DATAFRAME -------')
+print('=======>> SE EXTRAEN LOS ARCHIVOS .bson DE GOOGLE DRIVE Y SE CONVIERTEN A DATAFRAME')
 
 df_animals = bson_to_dataframe('animals.bson')
 df_datarows = bson_to_dataframe('datarows.bson')
@@ -28,12 +28,12 @@ df_plots = bson_to_dataframe('plots.bson')
 df_settlementithcounts = bson_to_dataframe('settlementithcounts.bson')
 df_settlements = bson_to_dataframe('settlements.bson')
 
-print('------- ARCHIVOS DATAFRAME YA GENERADOS -------')
+print('=======>> ARCHIVOS DATAFRAME YA GENERADOS')
 print('')
 
 
 
-print('------- COMIENZA CODIGO DE GENERACION df_general -------')
+print('=======>> COMIENZA CODIGO DE GENERACION df_general (ESTE PROCESO DEMORA UNOS MINUTOS)')
 
 # Generacion de df con todos los dataRowType = GPS
 df_gps = base_gps(df_datarows)
@@ -52,21 +52,21 @@ df_general = base_general(df_gps, df_beacon, df_battery)
 # df_general.to_parquet("./tablas/df_general.parquet", index=False)
 
 
-print('------- TERMINA CODIGO DE GENERACION df_general -------')
+print('=======>> TERMINA CODIGO DE GENERACION df_general')
 print('')
 
 
-print("------- COMIENZA CODIGO DE GENERACION df_plots2 -------")
+print("=======>> COMIENZA CODIGO DE GENERACION df_plots2")
 
 # Armado de la base_plots2
 df_plots2 = base_plots2(df_animals, df_devices, df_settlements)
 
 
-print('------- TERMINA CODIGO DE GENERACION df_plots2 -------')
+print('=======>> TERMINA CODIGO DE GENERACION df_plots2')
 print('')
 
 
-print('------- COMIENZA CODIGO DE GENERACION tabla_hechos_final -------')
+print('=======>> COMIENZA CODIGO DE GENERACION tabla_hechos_final')
 
 
 """
@@ -143,11 +143,11 @@ df_tablahechos_final = df_tablahechos_final.reset_index(drop=True)
 # Guardar en CSV
 save_tranformation(df_tablahechos_final, 'tabla_hechos_final')
 
-print("------- TERMINA CODIGO DE GENERACION tabla_hechos_final -------")
+print("=======>> TERMINA CODIGO DE GENERACION tabla_hechos_final")
 print('')
 
 
-print("------- COMIENZA CODIGO DE GENERACION 'cantidad_ganado' -------")
+print("=======>> COMIENZA CODIGO DE GENERACION 'cantidad_ganado'")
 
 
 # Calcula la cantidad de vacas separadas por GPS y Mac hay en un campo por fecha 
@@ -156,13 +156,13 @@ df_cantidad_ganado = cantidad_ganado (df_tablahechos_final)
 # Guardar en CSV
 save_tranformation(df_cantidad_ganado, 'cantidad_ganado')
 
-print("------- TERMINA CODIGO DE GENERACION 'cantidad_ganado' -------")
+print("=======>> TERMINA CODIGO DE GENERACION 'cantidad_ganado'")
 print('')
 
 
 
 
-print("------- COMIENZA CODIGO DE GENERACION 'distancias_recorridas' -------")
+print("=======>> COMIENZA CODIGO DE GENERACION 'distancias_recorridas'")
 
 # A partir del dataframe df_tablahechos_final obtenemos dos dataframes con la posición de las vacas 
 # en horario diuro y nocturno
@@ -180,18 +180,21 @@ df_distancias_recorridas = distancia_diaria(df_UUID_diurno, df_UUID_nocturno)
 # Se guarda la tabla
 save_tranformation(df_distancias_recorridas, 'distancias_recorridas') 
 
-print("------- TERMINA CODIGO DE GENERACION 'distancias_recorridas' -------")
+print("=======>> TERMINA CODIGO DE GENERACION 'distancias_recorridas'")
 print('')
 
 
-print("------- COMIENZA CODIGO DE GENERACION 'tabla_ith' -------")
+print("=======>> COMIENZA CODIGO DE GENERACION 'tabla_ith'")
 
 
 ith_sett_join = get_ith_with_settlements_names_and_flags()
 save_tranformation(ith_sett_join, 'tabla_ith.csv')
 
 
-print("------- TERMINA CODIGO DE GENERACION 'tabla_ith' -------")
+print("=======>> TERMINA CODIGO DE GENERACION 'tabla_ith'")
+print()
 
+print("=======>> YA SE HA FINALIZADO CON LA EJECUCIÓN DEL CÓDIGO")
+print("=======>> LOS ARCHIVOS GENERADOS SE ENCUENTRAN EN LA CARPETA 'transformations'")
 
 

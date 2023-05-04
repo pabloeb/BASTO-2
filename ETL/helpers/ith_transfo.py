@@ -1,4 +1,4 @@
-from .conexiones import bson_to_dataframe
+from infrastructure.conexiones import bson_to_dataframe
 import bson
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -23,10 +23,10 @@ def merge_settlements_and_ith_tables(df_ith,df_settlements):
     df = df_ith.merge(df_settlements, left_on='settlementId', right_on='_id')
     return df[['ITH','createdAt_x','name']]
 
-def get_clean_settlements():
-    """get settlements table and drop unvaluable data"""
+def get_selected_settlements(selection):
+    """get selected settlements from table"""
     df = read_settlements()
-    df = df[df.name.isin(['La Florida','MACSA'])]
+    df = df[df.name.isin(selection)]
     return df
 
 def add_date_and_time_to_ith(df):
@@ -49,7 +49,7 @@ def add_flags_to_ith(ith):
     ith['alerta'] = ith.ITH.apply(lambda x : 1 if x >= 75 else 0)
     ith['peligro'] = ith.ITH.apply(lambda x : 1 if x >= 79 else 0)
     ith['emergencia'] = ith.ITH.apply(lambda x : 1 if x >= 84 else 0)
-    dias_peligro = ith.groupby(['name','fecha']).sum()['peligro']
+    dias_peligro = ith.groupby(['name','fecha'])[['peligro']].sum()
     dias_peligro = dias_peligro.reset_index()
 
     # dias_peligro = pd.DataFrame(data={'valores':dias_peligro.values, 'fecha':dias_peligro.index})
@@ -74,7 +74,7 @@ def add_flags_to_ith(ith):
 def get_ith_with_settlements_names_and_flags():
     """get and merge ith and settlements tables to create a clean resulting table with additional info"""
     df_ith = get_clean_ith()
-    df_sett = get_clean_settlements()
+    df_sett = get_selected_settlements(['La Florida','MACSA'])
     df_merge = merge_settlements_and_ith_tables(df_ith, df_sett)
     df = add_date_and_time_to_ith(df_merge)
     ith = set_granularity_to_hour(df)

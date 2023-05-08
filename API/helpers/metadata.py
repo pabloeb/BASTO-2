@@ -42,6 +42,25 @@ Las opciones son:
 * **fecha fin** fin de periodo a consultar - formato: año-mes-dia (ejemplo 2023-03-02)
 * **establecimiento** nombre del establecimiento en que circula el ganado (ejemplo MACSA).
 
+## Posiciones de un collar durante fecha en un establecimiento
+
+Consulte latitudes y longitudes de un animal con collar durante un dia en un establecimiento.
+
+Las opciones son: 
+
+* **fecha** fecha a consultar - formato: año-mes-dia (ejemplo 2023-03-01).
+* **id collar** identificador de collar (ejemplo A12)
+* **establecimiento** nombre del establecimiento en que circula el ganado (ejemplo MACSA).
+
+## Identificadores de collares durante fecha en un establecimiento
+
+Consulte identificadores de collares de animales durante un dia en un establecimiento.
+
+Las opciones son: 
+
+* **fecha** fecha a consultar - formato: año-mes-dia (ejemplo 2023-03-01).
+* **establecimiento** nombre del establecimiento en que circula el ganado (ejemplo MACSA).
+
 """
 tags_metadata = [
     {
@@ -59,6 +78,14 @@ tags_metadata = [
     {
         'name':'Horas de EC por dia',
         'description':"Admite filtros de **fecha inicio**, **fecha fin** y **establecimiento**."
+    },
+    {
+        'name':'Posiciones de un collar por fecha',
+        'description':"Admite filtros de **fecha**, **id de collar** y **establecimiento**."
+    },
+    {
+        'name':'Identificadores de collares por fecha',
+        'description':"Admite filtros de **fecha** y **establecimiento**."
     }
 ]
 

@@ -1,11 +1,27 @@
 from fastapi import FastAPI
 from helpers.filter_classes import *
 from helpers.ith_functions import *
+from helpers.hechos_functions import *
 from helpers.metadata import app
 from fastapi import Response
 
+#ENDPOINTS HECHOS
 
-#ENDPOINTS
+@app.post("/get_gps_positions",tags=["Posiciones de un collar por fecha"],summary='Devuelve horas junto a posiciones del collar o null en caso de parametros invalidos')
+
+def get_gpspos(filtro: FiltroDiaEstablecimientoId):
+    
+    return get_gps_positions_by_day(filtro.date, filtro.settlement, filtro.gpsId)
+
+
+@app.post("/get_gps_ids_by_day",tags=["Identificadores de collares por fecha"],summary='Devuelve ids de collares por fecha o null en caso de parametros invalidos')
+
+def get_gps_ids_day(filtro: FiltroDiaEstablecimiento):
+    
+    return get_gps_ids_by_day(filtro.date, filtro.settlement)
+
+
+#ENDPOINTS ITH
 
 @app.post("/get_ec",tags=["Cantidad de horas de estress calorico"],summary='Devuelve total horas de estress calorico o null en caso de parametros invalidos')
 
@@ -32,6 +48,7 @@ def get_heat_wave_d(filtro: FiltroFechasEstablecimiento):
     if dias:
         return {'dias_oc': dias}
     return dias
+
 
 @app.post("/get_ec_by_day",tags=["Horas de EC por dia"],summary='Devuelve dias junto a su cantidad de horas de EC o null en caso de parametros invalidos')
 

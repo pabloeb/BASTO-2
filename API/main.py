@@ -7,23 +7,36 @@ from fastapi import Response
 
 #ENDPOINTS HECHOS
 
-@app.post("/get_gps_positions",tags=["Posiciones de un collar por fecha"],summary='Devuelve horas junto a posiciones del collar o null en caso de parametros invalidos')
+@app.post("/get_gps_positions",tags=["Posiciones de un collar por fecha y establecimiento"],summary='Devuelve horas junto a sus posiciones del collar o null en caso de parametros invalidos')
 
-def get_gpspos(filtro: FiltroDiaEstablecimientoId):
+def get_gpspos(filtro: FiltroDiaEstablecimientoGpsId):
     
     return get_gps_positions_by_day(filtro.date, filtro.settlement, filtro.gpsId)
 
 
-@app.post("/get_gps_ids_by_day",tags=["Identificadores de collares por fecha"],summary='Devuelve ids de collares por fecha o null en caso de parametros invalidos')
+@app.post("/get_gps_ids_by_day",tags=["Identificadores de collares por fecha y establecimiento"],summary='Devuelve ids de collares por fecha o null en caso de parametros invalidos')
 
 def get_gps_ids_day(filtro: FiltroDiaEstablecimiento):
     
     return get_gps_ids_by_day(filtro.date, filtro.settlement)
 
 
+@app.post("/get_beacon_positions",tags=["Posiciones de una caravana por fecha y establecimiento"],summary='Devuelve horas junto a sus posiciones de la caravana o null en caso de parametros invalidos')
+
+def get_beacon_pos(filtro: FiltroDiaEstablecimientoBeaconId):
+    
+    return get_beacon_positions_by_day(filtro.date, filtro.settlement, filtro.beaconId)
+
+
+@app.post("/get_beacon_ids_by_day",tags=["Identificadores de caravanas por fecha y establecimiento"],summary='Devuelve ids de caravanas por fecha o null en caso de parametros invalidos')
+
+def get_beacon_ids_day(filtro: FiltroDiaEstablecimiento):
+    
+    return get_beacon_ids_by_day(filtro.date, filtro.settlement)
+
 #ENDPOINTS ITH
 
-@app.post("/get_ec",tags=["Cantidad de horas de estress calorico"],summary='Devuelve total horas de estress calorico o null en caso de parametros invalidos')
+@app.post("/get_ec",tags=["Cantidad de horas de estress calorico en establecimiento"],summary='Devuelve total horas de estress calorico o null en caso de parametros invalidos')
 
 def get_ec(filtro: FiltroFechasEstablecimiento):
     
@@ -33,14 +46,14 @@ def get_ec(filtro: FiltroFechasEstablecimiento):
     return horas
 
 
-@app.post("/get_mean_ith",tags=["ITH promedio por hora"],summary='Devuelve horas del dia junto a su ith promedio o null en caso de parametros invalidos')
+@app.post("/get_mean_ith",tags=["ITH promedio por hora en establecimiento"],summary='Devuelve horas del dia junto a su ith promedio o null en caso de parametros invalidos')
 
 def get_mean_ith_inrange(filtro: FiltroFechasEstablecimiento):
 
     return get_mean_ith(filtro.start_date, filtro.end_date, filtro.settlement)
     
 
-@app.post("/get_heat_wave_days",tags=["Cantidad de dias de ola de calor"],summary='Devuelve cantidad de dias de ola de calor o null en caso de parametros invalidos')
+@app.post("/get_heat_wave_days",tags=["Cantidad de dias de ola de calor en establecimiento"],summary='Devuelve cantidad de dias de ola de calor o null en caso de parametros invalidos')
 
 def get_heat_wave_d(filtro: FiltroFechasEstablecimiento):
 
@@ -50,7 +63,7 @@ def get_heat_wave_d(filtro: FiltroFechasEstablecimiento):
     return dias
 
 
-@app.post("/get_ec_by_day",tags=["Horas de EC por dia"],summary='Devuelve dias junto a su cantidad de horas de EC o null en caso de parametros invalidos')
+@app.post("/get_ec_by_day",tags=["Horas de EC por dia en establecimiento"],summary='Devuelve dias junto a su cantidad de horas de EC o null en caso de parametros invalidos')
 
 def get_ec_by_d(filtro: FiltroFechasEstablecimiento):
 

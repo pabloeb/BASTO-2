@@ -1,16 +1,9 @@
 import pandas as pd
 import numpy as np
+from infrastructure.conexiones import *
 
 
 # AUXILIARES
-
-
-# ================================== TEMPORAL =====================================
-def get_ith():
-    """obtiene dataframe de transformaciones de dataset ith"""
-    return pd.read_csv('../ETL/transformations/tabla_ith.csv.csv')
-# ==============================================================================
-
 
 def filter_df(df, start_date, end_date, settlement):
   """filtra filas del df por establecimiento y rango de fechas"""

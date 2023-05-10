@@ -23,10 +23,11 @@ def merge_settlements_and_ith_tables(df_ith,df_settlements):
     df = df_ith.merge(df_settlements, left_on='settlementId', right_on='_id')
     return df[['ITH','createdAt_x','name']]
 
-def get_selected_settlements(selection):
-    """get selected settlements from table"""
+def get_selected_settlements(selection:list=[]):
+    """get selected settlements from table (all if empty selection)"""
     df = read_settlements()
-    df = df[df.name.isin(selection)]
+    if len(selection) > 0:
+        df = df[df.name.isin(selection)]
     return df
 
 def add_date_and_time_to_ith(df):
@@ -74,7 +75,9 @@ def add_flags_to_ith(ith):
 def get_ith_with_settlements_names_and_flags():
     """get and merge ith and settlements tables to create a clean resulting table with additional info"""
     df_ith = get_clean_ith()
-    df_sett = get_selected_settlements(['La Florida','MACSA'])
+    df_sett = get_selected_settlements(['MACSA'])
+    if df_sett.empty:
+        return pd.DataFrame()
     df_merge = merge_settlements_and_ith_tables(df_ith, df_sett)
     df = add_date_and_time_to_ith(df_merge)
     ith = set_granularity_to_hour(df)

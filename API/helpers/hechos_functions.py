@@ -1,13 +1,8 @@
 import pandas as pd
 from collections import OrderedDict
+from infrastructure.conexiones import *
 
 #auxiliares
-
-## ========= TEMPORAL ===================
-def get_hechos_df():
-    return pd.read_csv('../ETL/transformations/tabla_hechos_final.csv')
-#========================================
-
 
 def get_filtered_df_by_day_sett_id(df, day, settlement, deviceId, deviceType):
     """filtra el dataset por dia, establecimiento, tipo de dispositivo y id de dispositivo"""

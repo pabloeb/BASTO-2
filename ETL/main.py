@@ -179,7 +179,7 @@ print("=======>> COMIENZA CODIGO DE GENERACION 'tabla_ith'")
 
 
 ith_sett_join = get_ith_with_settlements_names_and_flags()
-save_tranformation(ith_sett_join, 'tabla_ith.csv')
+save_tranformation(ith_sett_join, 'tabla_ith')
 
 
 print("=======>> TERMINA CODIGO DE GENERACION 'tabla_ith'")

@@ -13,3 +13,6 @@ def get_ith():
 def get_daily_distances_df():
     """obtiene dataframe de transformaciones distancias diarias"""
     return pd.read_csv('../ETL/transformations/GPS_distancia_diaria.csv')
+
+def get_recorrido_diario_df():
+    return pd.read_csv('../ETL/transformations/GPS_recorrido_individual.csv')

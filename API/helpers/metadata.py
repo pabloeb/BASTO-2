@@ -40,6 +40,15 @@ Las opciones son:
 * **fecha** fecha a consultar - formato: año-mes-dia (ejemplo 2023-03-01).
 * **establecimiento** nombre del establecimiento en que circula el ganado (ejemplo MACSA).
 
+## Distancias recorridas por el ganado en un establecimiento
+
+Consulte distancias diurnas, nocturnas y total recorrida por los animales durante un período de fechas en un establecimiento. El resultado esta en metros.
+
+Las opciones son: 
+
+* **fecha inicio** inicio de periodo a consultar - formato: año-mes-dia (ejemplo 2023-03-01).
+* **fecha fin** fin de periodo a consultar - formato: año-mes-dia (ejemplo 2023-03-02)
+* **establecimiento** nombre del establecimiento en que circula el ganado (ejemplo MACSA).
 
 ## Cantidad de horas de estress calorico 
 
@@ -100,7 +109,10 @@ tags_metadata = [
         'name':'Identificadores de caravanas por fecha y establecimiento',
         'description':"Admite filtros de **fecha** y **establecimiento**."
     },
-
+    {
+        'name':'Distancias recorrida por el ganado en un establecimiento',
+        'description':"Admite filtros de **fecha inicio**, **fecha fin** y **establecimiento**."
+    },
     {
         "name": "Cantidad de horas de estress calorico en establecimiento",
         "description": "Admite filtros de **fecha inicio**, **fecha fin** y **establecimiento**."

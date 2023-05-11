@@ -170,9 +170,6 @@ def base_plots2(animals, devices, settlements):
     animalSettlement_new = df_animals2.pop('animalSettlement_new')
     df_animals2.insert(2, 'animalSettlement_new', animalSettlement_new)
 
-    # Armo df_plots2 con las coincidencias de la columna 'animalSettlement_new' del df_animals2 
-    # con la columna '_id' del df_setllements
-
     # Paso las columnas a comparar a string
     df_animals2['animalSettlement_new'] = df_animals2['animalSettlement_new'].astype(str)
     settlements['_id'] = settlements['_id'].astype(str)
@@ -196,19 +193,11 @@ def base_plots2(animals, devices, settlements):
 
 # ----------->> COMIENZA CODIGO PARA 'tabla_hechos_final' <<-----------
 
-def tablahechos_inicial(df_general, df_plots2):
-
-    # Lee el archivo parquet
-    # df_general = pd.read_parquet('./tablas/df_general.parquet')
-    
-    # Cargo la base (join de varias tablas originales)
-    # df_plots2 = pd.read_csv("./tablas/df_plots2.csv")
+def tablahechos_inicial(df_general, df_plots2, fecha_inicial, fecha_final, establecimiento):
 
     # Join de ambas tablas 
     tablahechos_ini = df_general.merge(df_plots2,left_on = "UUID", right_on ="deviceMACAddress")
     
-    #tablahechos_ini = tablahechos_ini.drop(columns = "_id", axis=1) 
-
     # Se pasa la columna "name" a la posición 8
     nombre_columna = tablahechos_ini.pop("name")
     tablahechos_ini.insert(8, "name", nombre_columna)
@@ -220,14 +209,45 @@ def tablahechos_inicial(df_general, df_plots2):
     # Se filtra hasta la columna 10
     tablahechos_ini = tablahechos_ini.iloc[ : , :10]
 
-    # Se filtra el campo MACSA por fecha para obtener un Dataframe que va desde el 24/02/2023 al 08/03/2023
-    tablahechos_ini_filtrado = tablahechos_ini[(tablahechos_ini["Fecha"] > "2023-02-23") & (tablahechos_ini["Fecha"] < "2023-03-09") & (tablahechos_ini["name"]=="MACSA" )]
+    # Se aplican los filtros por establecimiento y por rango de fechas (segun lo definido en variables)
+
+    if fecha_inicial != "" and fecha_final != "" and establecimiento != "":
+        tablahechos_ini_filtrado = tablahechos_ini[(tablahechos_ini["Fecha"] >= fecha_inicial) & 
+                                               (tablahechos_ini["Fecha"] <= fecha_final) & 
+                                               (tablahechos_ini["name"] == establecimiento)]
+    
+    else:
+        
+        if fecha_inicial != "" and fecha_final != "" and establecimiento == "":
+            tablahechos_ini_filtrado = tablahechos_ini[(tablahechos_ini["Fecha"] >= fecha_inicial) & 
+                                                   (tablahechos_ini["Fecha"] <= fecha_final)]
+        
+        elif fecha_inicial != "" and fecha_final == "" and establecimiento != "":
+            tablahechos_ini_filtrado = tablahechos_ini[(tablahechos_ini["Fecha"] >= fecha_inicial) & 
+                                                   (tablahechos_ini["name"] == establecimiento)]
+        
+        elif fecha_inicial == "" and fecha_final != "" and establecimiento != "":
+            tablahechos_ini_filtrado = tablahechos_ini[(tablahechos_ini["Fecha"] <= fecha_final) & 
+                                                   (tablahechos_ini["name"] == establecimiento)]
+        
+        elif fecha_inicial != "" and fecha_final == "" and establecimiento == "":
+            tablahechos_ini_filtrado = tablahechos_ini[(tablahechos_ini["Fecha"] >= fecha_inicial)]
+        
+        elif fecha_inicial == "" and fecha_final != "" and establecimiento == "":
+            tablahechos_ini_filtrado = tablahechos_ini[(tablahechos_ini["Fecha"] <= fecha_final)]
+        
+        elif fecha_inicial == "" and fecha_final == "" and establecimiento != "":
+            tablahechos_ini_filtrado = tablahechos_ini[(tablahechos_ini["name"] == establecimiento)]
+        
+        else:
+            tablahechos_ini_filtrado = tablahechos_ini.copy()           # Si todas las variables están vacías, se retorna la tabla sin filtrar
+
 
     # Se filtra para conservar solo las categorias GPS y BEACON del campo dataRowType
     tablahechos_ini_filtrado = tablahechos_ini_filtrado[tablahechos_ini_filtrado["dataRowType"] != "BATTERY"]
     
     # Muy importante ordenar para que funcione el código posterior:
-    tablahechos_ini_filtrado = tablahechos_ini_filtrado.sort_values(['dataRowType',"Mac",'Fecha'], ascending=[True, True, True])
+    tablahechos_ini_filtrado = tablahechos_ini_filtrado.sort_values(['dataRowType', "Mac", 'Fecha'], ascending=[True, True, True])
     tablahechos_ini_filtrado1 = tablahechos_ini_filtrado.reset_index().drop(columns =["index"])
 
     return tablahechos_ini_filtrado1
@@ -238,7 +258,7 @@ def get_gps_prevdate(df, uuid, fecha):
     """dado uuid y fecha trae todos los gps de df con ese uuid y previos a esa fecha"""
     gps_prev = df[(df.UUID == uuid) & (df.Fecha <= fecha) & (df.Fecha >= (pd.to_datetime(fecha) + pd.offsets.Day(-5)).strftime("%Y-%m-%d")) & (df.dataRowType == 'GPS')]
     if (len(gps_prev) > 0): 
-      return gps_prev
+        return gps_prev
     return df[(df.UUID == uuid) & (df.Fecha <= fecha) & (df.dataRowType == 'GPS')]
 
 
@@ -267,11 +287,11 @@ def fill_beacon_gps_pos(df):
 Agrega una columna distancia_virtual en metros al dataframe tablahechos_ini_filtrado1, que es la distancia virtual de un beacon al GPS que lo reportó.
 Desde aquí se puede corregir la distancia aleatoria del Beacon al GPS en función de la fórmula que involucra al RSSI.
 """
-def distancia_virtual(df):
+def distancia_virtual(df, RSSI_un_metro, n):
     distancias = []
     for index, row in df.iterrows():
         if row['position_gps_assoc'] is not None:
-            distancia = 10 + (-0.4) * row['RSSI']      #<--------------------------- Establece la distancia aleatoria del GPS al BEACON
+            distancia = 10 ** ((RSSI_un_metro-(row["RSSI"])) / (10*n))   # <------- establece la distancia aleatoria del GPS al BEACON
             distancias.append(distancia)
         else:
             distancias.append(None)
@@ -316,9 +336,9 @@ def move_point_along_radius(center_lat, center_lon, distance):
     center_lat_rad, center_lon_rad = math.radians(center_lat), math.radians(center_lon)
     point_lat_rad, point_lon_rad = math.radians(point_lat), math.radians(point_lon)
     direction = math.atan2(math.sin(point_lon_rad - center_lon_rad) * math.cos(point_lat_rad),
-                              math.cos(center_lat_rad) * math.sin(point_lat_rad) -
-                              math.sin(center_lat_rad) * math.cos(point_lat_rad) *
-                              math.cos(point_lon_rad - center_lon_rad))
+                            math.cos(center_lat_rad) * math.sin(point_lat_rad) -
+                            math.sin(center_lat_rad) * math.cos(point_lat_rad) *
+                            math.cos(point_lon_rad - center_lon_rad))
     
     # Calcular las nuevas coordenadas a lo largo del radio
     new_lat = math.degrees(math.asin(math.sin(center_lat_rad) * math.cos(distance/6371000) +
@@ -354,117 +374,89 @@ def eliminacion_columnas_finales(df,numero_columna):
     return df
 
 
-""" En el siguiente código, la función 'interpolate_points' calcula  puntos virtuales con coordenadas de latitud y longitud sobre una recta definida por dos mediciones consecutivas de un mismo dispositivo BEACON en un intérvalo de tiempo seleccionado a través de la variable 'intervalo'"""
+""" En el siguiente código, la función 'interpolate_points' calcula puntos virtuales con coordenadas de latitud y longitud sobre una recta definida por dos mediciones consecutivas de un mismo dispositivo BEACON en un intérvalo de tiempo seleccionado a través de la variable 'intervalo'"""
 # Función de interpolación lineal
-def interpolate_points(p1, p2):
-    intervalo = 30              # <---------------------------- La variable intervalo controla el intervalo entre puntos virtuales (en minutos)
+def interpolate_points(p1, p2, set_intervalo, tiempo_entre_mediciones_max):
+    intervalo = set_intervalo
+
+    #Siempre tiempo_entre_mediciones_max > intervalo (manejo de error):
+    if tiempo_entre_mediciones_max < intervalo:
+        tiempo_entre_mediciones_max = intervalo + 1
 
     # Calculamos la diferencia de tiempo en minutos
-    delta_t = (p2['datetime'] - p1['datetime']).total_seconds() / 60.0
-
-    # Cuando el intervalo entre 2 mediciones es menor al intervalo seleccionado para generar los puntos vituales, la función no devuelve nada
-    # El código a continuación fuerza esa circunstancia en el caso que :
-    # - delta_t sea nula (dos mediciones consecutivas del mismo device en el mismo momento = duplicado ==> no genera resultado y sigue iterando),
-    # - delta_t sea mayor al tiempo máximo estipulado para generar los puntos virtuales o que sean de dias diferentes.
-    
-    if delta_t == 0 or (p1['datetime'].date() != p2['datetime'].date()):
-        intervalo = intervalo -1
-        delta_t = 1
-
-
-    # Convertimos las coordenadas en radianes
-    lat1, lon1 = map(math.radians, [p1['lat'], p1['lon']])
-    lat2, lon2 = map(math.radians, [p2['lat'], p2['lon']])
-
-
-    # Calculamos la distancia entre los dos puntos
-    d = 2 * math.asin(math.sqrt(math.sin((lat2 - lat1) / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin((lon2 - lon1) / 2) ** 2)) * 6371  # radio de la Tierra en km
-    
-    # Calculamos la velocidad promedio entre los dos puntos
-    speed = d / delta_t
-
-    # Calculamos los puntos intermedios. Se fijan los minutos de intervalo deseado con la variable "intervalo":
-
-    num_points = int(delta_t / intervalo)     
     points = []
-    for i in range(num_points):
-        frac = (i + 1) / (num_points + 1)
-        lat = math.degrees(lat1 + frac * (lat2 - lat1))
-        lon = math.degrees(lon1 + frac * (lon2 - lon1))
-        time = p1['datetime'] + timedelta(minutes=(i + 1) * intervalo)   
-        points.append({'lat': lat, 'lon': lon, 'datetime': time})
-    return points
-
-
-""" Esta función es llamada por la función "tabla_BEACONvir" En el siguiente código, la función 'interpolate_points' calcula puntos virtuales con coordenadas de latitud y longitud sobre una recta definida por dos mediciones consecutivas de un mismo dispositivo BEACON en un intérvalo de tiempo seleccionado a través de la variable 'intervalo'"""
-# Función de interpolación lineal
-def interpolate_points(p1, p2):
-    intervalo = 30              # <---------------------------- La variable intervalo controla el intervalo entre puntos virtuales (en minutos)
-
-     # Calculamos la diferencia de tiempo en minutos
-    delta_t = (p2['datetime'] - p1['datetime']).total_seconds() / 60.0
-
-    # Cuando el intervalo entre 2 mediciones es menor al intervalo seleccionado para generar los puntos vituales, la función no devuelve nada
-    # El código a continuación fueza esa circunstancia en el caso que delta_t sea nula (dos mediciones consecutivas del mismo device en el mismo momento = duplicados ==> no genera resultado y sigue iterando), o que delta_t sea mayor al tiempo máximo estipulado para generar los puntos virtuales, o que sean de dias diferentes.
-
-    if delta_t == 0 or (p1['datetime'].date() != p2['datetime'].date()):
-        intervalo = intervalo - 1
-        delta_t = 1
-
-
-    # Convertimos las coordenadas en radianes
-    lat1, lon1 = map(math.radians, [p1['lat'], p1['lon']])
-    lat2, lon2 = map(math.radians, [p2['lat'], p2['lon']])
-
-
-    # Calculamos la distancia entre los dos puntos
-    d = 2 * math.asin(math.sqrt(math.sin((lat2 - lat1) / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin((lon2 - lon1) / 2) ** 2)) * 6371  # radio de la Tierra en km
     
-    # Calculamos la velocidad promedio entre los dos puntos
-    speed = d / delta_t
+    if (p2['Fecha'] == p1['Fecha']):
+        
+        p1["Hora"] = pd.to_datetime(p1["Hora"], format="%H:%M:%S").strftime("%H:%M:%S")
+        p2["Hora"] = pd.to_datetime(p2["Hora"], format="%H:%M:%S").strftime("%H:%M:%S")
 
-    # Calculamos los puntos intermedios.Se fijan los minutos de intervalo deseado con la variable "intervalo":
+        delta_t = (pd.to_datetime(p2["Hora"]) - pd.to_datetime(p1["Hora"])).total_seconds() / 60
 
-    num_points = int(delta_t / intervalo)     
-    points = []
-    for i in range(num_points):
-        frac = (i + 1) / (num_points + 1)
-        lat = math.degrees(lat1 + frac * (lat2 - lat1))
-        lon = math.degrees(lon1 + frac * (lon2 - lon1))
-        time = p1['datetime'] + timedelta(minutes=(i + 1) * intervalo)   
-        points.append({'lat': lat, 'lon': lon, 'datetime': time})
+        # Cuando el intervalo entre 2 mediciones es igual a 0( duplicado de registro), o es menor al intervalo seleccionado para generar los puntos vituales, o mayor al tiempo máximo elegido entre mediciones para crear puntos virtuales o las mediciones consecutivas están en diferentes dias, la función devuelve una lista vacía
+    
+        if delta_t == 0 or delta_t > tiempo_entre_mediciones_max or delta_t < intervalo:
+            points = []
+            return points
+        else:
+            # Convertimos las coordenadas en radianes
+            lat1, lon1 = map(math.radians, [p1['lat'], p1['lon']])
+            lat2, lon2 = map(math.radians, [p2['lat'], p2['lon']])
+
+
+            # Calculamos la distancia entre los dos puntos
+            d = 2 * math.asin(math.sqrt(math.sin((lat2 - lat1) / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin((lon2 - lon1) / 2) ** 2)) * 6371  # radio de la Tierra en km
+    
+            # Calculamos la velocidad promedio entre los dos puntos
+            speed = d / delta_t
+
+            # Calculamos los puntos intermedios. Se fijan los minutos de intervalo deseado con la variable "intervalo":
+
+            num_points = int(delta_t / intervalo)     
+            points = []
+            for i in range(num_points):
+                frac = (i + 1) / (num_points + 1)
+                lat = math.degrees(lat1 + frac * (lat2 - lat1))
+                lon = math.degrees(lon1 + frac * (lon2 - lon1))
+                time = pd.to_datetime(p1['datetime']) + timedelta(minutes=(i + 1) * intervalo)
+                points.append({'lat': lat, 'lon': lon, 'datetime': time})
+            return points
     return points
 
 
 """
 Esta función itera el dataframe tablahechos_BEACON_aleatorios, y cuando encuentra dos BEACON consecutivos con igual MAC arma un diccionario con los valores de latitud, longitud y datetime de cada medición del Mac y los envía a la función "interpolate_points2" que evalua si hay que generar nuevos puntos interpolados entre las mediciones. Este código devuelve un dataframe sólo de los nuevos puntos interpolados.
 """
-def tabla_BEACONvir(tablahechos_BEACON_aleatorios):   
+def tabla_BEACONvir(tablahechos_BEACON_aleatorios, set_intervalo, tiempo_entre_mediciones_max):   
     
     resultados = []
 
     # Iterar a través de las filas del DataFrame
     for m in range(len(tablahechos_BEACON_aleatorios)-1):
+        
         # Comparar filas consecutivas solo si ambas tienen dataRowType = 'BEACON'
         if (tablahechos_BEACON_aleatorios.loc[m, 'dataRowType'] == 'BEACON') and (tablahechos_BEACON_aleatorios.loc[m+1, 'dataRowType'] == 'BEACON'):
+            
             # Verificar si los valores de la columna 'Mac' son iguales
             if tablahechos_BEACON_aleatorios.loc[m, 'Mac'] == tablahechos_BEACON_aleatorios.loc[m+1, 'Mac']:
                 # Si son iguales, crear un diccionario para cada fila con las claves 'lat', 'lon' y 'datetime' y los valores correspondientes
-                diccionario1 = {'lat': tablahechos_BEACON_aleatorios.loc[m, 'Latitud'], 'lon': tablahechos_BEACON_aleatorios.loc[m, 'Longitud'], 'datetime': tablahechos_BEACON_aleatorios.loc[m, 'Datetime'] }
-                diccionario2 = {'lat': tablahechos_BEACON_aleatorios.loc[m+1, 'Latitud'], 'lon': tablahechos_BEACON_aleatorios.loc[m+1, 'Longitud'], 'datetime': tablahechos_BEACON_aleatorios.loc[m+1, 'Datetime']}
+                diccionario1 = {'lat': tablahechos_BEACON_aleatorios.loc[m, 'Latitud'], 'lon': tablahechos_BEACON_aleatorios.loc[m, 'Longitud'], 'Hora': tablahechos_BEACON_aleatorios.loc[m, 'Hora'],'Fecha': tablahechos_BEACON_aleatorios.loc[m,'Fecha'].date(), 'datetime': tablahechos_BEACON_aleatorios.loc[m, 'Datetime']}
+                diccionario2 = {'lat': tablahechos_BEACON_aleatorios.loc[m+1, 'Latitud'], 'lon': tablahechos_BEACON_aleatorios.loc[m+1, 'Longitud'], 'Hora': tablahechos_BEACON_aleatorios.loc[m+1, 'Hora'],'Fecha': tablahechos_BEACON_aleatorios.loc[m+1,'Fecha'].date(), 'datetime': tablahechos_BEACON_aleatorios.loc[m+1, 'Datetime']}
                 
                 #Colocar los diccionarios resultantes de las dos mediciones de Mac consecutivas en la función para calcular los puntos intermedios entre ellas 
                 data = [diccionario1, diccionario2]
                 df = pd.DataFrame(data)
-                df['datetime'] = pd.to_datetime(df['datetime'])
+                
                 interpolated_points = []
                 for i in range(len(df) - 1):
                     p1, p2 = df.iloc[i], df.iloc[i + 1]
-                    points = interpolate_points(p1, p2)
+                                        
+                    points = interpolate_points(p1, p2, set_intervalo, tiempo_entre_mediciones_max)
+                                        
                     interpolated_points.extend(points)
                     resultado = pd.DataFrame(interpolated_points)
                     
-                    #Se agregan las otras columnas necesarias al dtaframe resultado     #<-------- Se puede agregar otras columnas a la tabla
+                    #Se agregan las otras columnas necesarias al dtaframe resultado
                     resultado["dataRowType"] = tablahechos_BEACON_aleatorios.loc[m, 'dataRowType']
                     resultado["Mac"] = tablahechos_BEACON_aleatorios.loc[m, 'Mac']
                     resultado["name"] = tablahechos_BEACON_aleatorios.loc[m, 'name']
@@ -478,49 +470,51 @@ def tabla_BEACONvir(tablahechos_BEACON_aleatorios):
     if len(resultados) > 0:
         resultado_final_BEACONVIR = pd.concat(resultados)
     else:
-        resultado_final_BEACONVIR  = pd.DataFrame()
+        resultado_final_BEACONVIR = pd.DataFrame()
 
     resultado_final_BEACONVIR = resultado_final_BEACONVIR.rename(columns={'lat': 'Latitud', 'lon': 'Longitud', 'datetime': 'Datetime'})
 
     # Generar las columnas Fecha y Hora a partir de Datetime:
     resultado_final_BEACONVIR['Datetime'] = pd.to_datetime(resultado_final_BEACONVIR['Datetime'])
-
+    
     # Creamos las columnas Fecha y Hora
     resultado_final_BEACONVIR['Fecha'] = resultado_final_BEACONVIR['Datetime'].dt.date
-    #resultado_final_BEACONVIR['Hora'] = resultado_final_BEACONVIR['Datetime'].dt.time   #<---- CUIDADO: No usar este código. En el merge con tablahechos_BEACON_aleatorios revisar que no haya conflicto con el tipo de dato (object/float)
     resultado_final_BEACONVIR['Hora'] = resultado_final_BEACONVIR['Datetime'].dt.strftime('%H:%M:%S')
 
     #Ordeno las columnas para poder concatenar con la tabla tablahechos_BEACON_aleatorios
     resultado_final_BEACONVIR = resultado_final_BEACONVIR[["Fecha", "Hora", "Datetime", "dataRowType", "UUID", "Latitud", "Longitud", "Mac", "name", "RSSI"]]
-
+    
     return resultado_final_BEACONVIR 
 
 
 """
 Esta función itera el dataframe df_tablahechos_parcial, y cuando encuentra dos GPS consecutivos con igual UUID arma un par de diccionarios con los valores de latitud, longitud y datetime de cada medición del UUID y los envía a la función "interpolate_points", que evalua si hay que generar nuevos puntos interpolados entre las mediciones. Este código devuelve un dataframe sólo de los nuevos puntos UUID interpolados.
 """
-def tabla_UUIDvir(df_tablahechos_parcial):   
+def tabla_UUIDvir(df_tablahechos_parcial, set_intervalo, tiempo_entre_mediciones_max):   
     
     resultados = []
 
     # Iterar a través de las filas del DataFrame
-    for m in range(len(df_tablahechos_parcial)-1):
+    for m in range(len(df_tablahechos_parcial) - 1):
+        
         # Comparar filas consecutivas solo si ambas tienen dataRowType = 'GPS'
         if (df_tablahechos_parcial.loc[m, 'dataRowType'] == 'GPS') and (df_tablahechos_parcial.loc[m+1, 'dataRowType'] == 'GPS'):
+            
             # Verificar si los valores de la columna 'UUID' son iguales
             if df_tablahechos_parcial.loc[m, 'UUID'] == df_tablahechos_parcial.loc[m+1, 'UUID']:
                 # Si son iguales, crear un diccionario para cada fila con las claves 'lat', 'lon' y 'datetime' y los valores correspondientes
-                diccionario1 = {'lat': df_tablahechos_parcial.loc[m, 'Latitud'], 'lon': df_tablahechos_parcial.loc[m, 'Longitud'], 'datetime': df_tablahechos_parcial.loc[m, 'Datetime']}
-                diccionario2 = {'lat': df_tablahechos_parcial.loc[m+1, 'Latitud'], 'lon': df_tablahechos_parcial.loc[m+1, 'Longitud'], 'datetime': df_tablahechos_parcial.loc[m+1,'Datetime']}
+                diccionario1 = {'lat': df_tablahechos_parcial.loc[m, 'Latitud'], 'lon': df_tablahechos_parcial.loc[m, 'Longitud'], 'Hora': df_tablahechos_parcial.loc[m, 'Hora'], 'Fecha': df_tablahechos_parcial.loc[m, 'Fecha'], 'datetime': df_tablahechos_parcial.loc[m, 'Datetime']}
+                diccionario2 = {'lat': df_tablahechos_parcial.loc[m+1, 'Latitud'], 'lon': df_tablahechos_parcial.loc[m+1, 'Longitud'], 'Hora': df_tablahechos_parcial.loc[m+1, 'Hora'],'Fecha': df_tablahechos_parcial.loc[m+1, 'Fecha'],'datetime': df_tablahechos_parcial.loc[m+1, 'Datetime']}
                 
                 #Colocar los diccionarios resultantes de dos mediciones de GPS consecutivas en la función para calcular los puntos intermedios entre ellas 
                 data = [diccionario1, diccionario2]
                 df = pd.DataFrame(data)
                 df['datetime'] = pd.to_datetime(df['datetime'])
                 interpolated_points = []
+                
                 for i in range(len(df) - 1):
                     p1, p2 = df.iloc[i], df.iloc[i + 1]
-                    points = interpolate_points(p1, p2)
+                    points = interpolate_points(p1, p2, set_intervalo, tiempo_entre_mediciones_max)
                     interpolated_points.extend(points)
                     resultado = pd.DataFrame(interpolated_points)
                     
@@ -547,8 +541,7 @@ def tabla_UUIDvir(df_tablahechos_parcial):
 
     # Creamos las columnas Fecha y Hora
     resultado_final_UUID['Fecha'] = resultado_final_UUID['Datetime'].dt.date
-    resultado_final_UUID ['Hora'] = resultado_final_UUID['Datetime'].dt.time   #<---- CUIDADO: No usar este código. En el merge con la tabla tablahechos_BEACON_aleatorios revisar que no haya conflicto con el tipo de dato (object/float)
-    #resultado_final_UUID['Hora'] = resultado_final_UUID['Datetime'].dt.strftime('%H:%M:%S')
+    resultado_final_UUID ['Hora'] = resultado_final_UUID['Datetime'].dt.time
 
     #Ordeno las columnas para poder concatenar con la tabla tablahechos_BEACON_aleatorios
     resultado_final_UUID = resultado_final_UUID[["Fecha", "Hora", "Datetime", "dataRowType", "UUID", "Latitud", "Longitud", "Mac", "name", "RSSI"]]
@@ -584,7 +577,9 @@ def cantidad_ganado(df):
 
 
 
-# ----------->> COMIENZA CODIGO PARA 'distancias_recorridas' <<-----------
+
+# ----------->> COMIENZAN FUNCIONES 'recorrido_diurno', "recorrido-nocturno" y "recorrido total" de todo el ganado <<-----------
+# ----------->> Recorrido individual de cada GPS por establecimiento (doble funcionalidad) <<-----------
 
 # Filtra la tabla_hechos_final por tipo GPS y luego por horario, obteniendo un dataframe de GPS diurno y otro noctuno  
 
@@ -594,14 +589,12 @@ def filtrar_diurno_nocturno(df, horainicio, horafin):
     df = df[(df['dataRowType'] == "GPS")]
 
     # Convertir la columna "Fecha" a datetime para poder filtrar por fecha
-    #df['Fecha'] = pd.to_datetime(df['Fecha'])      # ESTO LO COMENTE YO PORQUE ME TIRABA UN WARNING (lo cambie por las 2 lineas que siguen abajo)
     df = df.copy()
     df.loc[:, 'Fecha'] = pd.to_datetime(df['Fecha']).dt.strftime('%Y-%m-%d')
 
     # Filtrar el DataFrame por hora
     horainicio == pd.to_datetime(horainicio, format='%H:%M:%S').time()
     horafin == pd.to_datetime(horafin, format='%H:%M:%S').time()
-     #df = df[(df['Hora'] >= horainicio) & (df['Hora'] <= horafin)]
     
     mask = (df['Hora'].between(horainicio,horafin))
     df1 = df[mask].reset_index(drop=True)
@@ -612,7 +605,7 @@ def filtrar_diurno_nocturno(df, horainicio, horafin):
     return df1, df2
 
 
-# función para calcular la distancia total a partir de una lista de puntos con latitud y longitud
+# Función para calcular la distancia total a partir de una lista de puntos con latitud y longitud
 
 '''
 Para el cálculo del recorrido diario se tomaron sólo los GPS que transmitieron, y se tomó como distancia recorrida 
@@ -631,14 +624,18 @@ def calcular_distancia_total(puntos):       # esta funcion se llama desde la fun
         total_distance += distancia
     return total_distance
 
-def distancias(df):
+def distancias(df, seleccion_funcion):
+    
+    # Cuando seleccion_funcion = 0 , la función distancias devuelve DFs de los recorridos totales del rodeo nocturno y diurno, cuando es igual a 1 devuelve DFs de los recorridos nocturnos y diurnos individuales de cada GPS del establecimiento
+
     # inicializar variables
     uuid_anterior = None
     lat_anterior = None
     lon_anterior = None
     fecha_anterior = None
     puntos = []
-    data = {'UUID': [], 'Fecha': [], 'distancia recorrida': []}
+    data = {'UUID': [], 'Fecha': [], 'distancia recorrida': [], 'name': []}
+    
 
     # recorrer dataframe fila por fila
     for index, row in df.iterrows():
@@ -668,6 +665,8 @@ def distancias(df):
             data['UUID'].append(uuid_anterior)
             data['Fecha'].append(fecha_anterior)
             data['distancia recorrida'].append(distancia_total)
+            data['name'].append(df.loc[(df['UUID'] == uuid_anterior) & (df['Fecha'] == fecha_anterior), 'name'].iloc[0])
+            
             uuid_anterior = uuid_actual
             lat_anterior = lat_actual
             lon_anterior = lon_actual
@@ -679,28 +678,108 @@ def distancias(df):
     data['UUID'].append(uuid_anterior)
     data['Fecha'].append(fecha_anterior)
     data['distancia recorrida'].append(distancia_total)
-
-    # crear dataframe nuevo
-    df1 = pd.DataFrame(data)
-
-    #Obtenr un DF con la fecha y el recorrido delUUID que más distancia recorrió ese díamáximo
-    #Agrupar por fecha y UUID
-    df1 = df1.groupby(['Fecha', 'UUID'])['distancia recorrida'].max().reset_index()
+    data['name'].append(df.loc[(df['UUID'] == uuid_anterior) & (df['Fecha'] == fecha_anterior), 'name'].iloc[0])
     
-    # Agrupar por fecha y obtener el máximo de la columna "distancia recorrida"
-    df1 =df1 .groupby('Fecha')['distancia recorrida'].max().reset_index()
+    df_recorrido_individual = pd.DataFrame(data)
 
-    return df1
+# función para calcular la distancia total a partir de una lista de puntos con latitud y longitud
+
+'''
+Para el cálculo del recorrido diario se tomaron sólo los GPS que transmitieron, y se tomó como distancia recorrida 
+el GPS de mayor recorrido, en lugar de tomar un promedio de todos los GPS como hubiera sido conveniente.
+Esto se hizo así porque hay mucha disparidad en la cantidad de mediciones entre diferentes GPS. Muchos transmiten 
+muy pocas veces por día y muy espaciado, por lo que la función que genera puntos virtuales no los toma, y por otro 
+lado hay otros que tienen varias mediciones en poco tiempo y luego nada, lo que genera una distancia recorrida muy 
+corta, y otros GPS solo tienen una medición diaria, con lo cual la distancia recorrida es nula. 
+Por ello, hacer un promedio no reflejaría una distancia recorrida medianamente representativa de la realidad.
+'''
+
+def calcular_distancia_total(puntos):
+    total_distance = 0
+    for i in range(len(puntos) - 1):
+        distancia = distance(puntos[i], puntos[i + 1]).meters
+        total_distance += distancia
+    return total_distance
+
+def distancias(df,seleccion_funcion):
+
+    #Cuando seleccion_funcion = 0 , la función distancias devuelve DFs de los recorridos totales del rodeo nocturno y diurno , cuando es igual a 1, devuelve DFs de los recorridos nocturnos y diurnos individuales de cada GPS del establecimiento
+
+    # inicializar variables
+    uuid_anterior = None
+    lat_anterior = None
+    lon_anterior = None
+    fecha_anterior = None
+    puntos = []
+    data = {'UUID': [], 'Fecha': [], 'distancia recorrida': [], 'name': []}
 
 
-# funcion que devuelve las distancias diurnas, nocturnas y totales del UUID que más distancia recorrió ese día
-def distancia_diaria(df, df1):
+    # recorrer dataframe fila por fila
+    for index, row in df.iterrows():
+        uuid_actual = row['UUID']
+        lat_actual = row['Latitud']
+        lon_actual = row['Longitud']
+        fecha_actual = row['Fecha']
+        
+        # si es la primera fila del recorrido, no calculamos distancia
+        if uuid_anterior is None:
+            uuid_anterior = uuid_actual
+            lat_anterior = lat_actual
+            lon_anterior = lon_actual
+            fecha_anterior = fecha_actual
+            puntos.append((lat_actual, lon_actual))
+            continue
+        
+        # si es la misma unidad de recorrido, agregamos punto a la lista
+        if uuid_actual == uuid_anterior and fecha_anterior == fecha_actual:     
+            puntos.append((lat_actual, lon_actual))
+            lat_anterior = lat_actual
+            lon_anterior = lon_actual
+        
+        # si es una unidad de recorrido diferente, guardamos los datos en el dataframe nuevo
+        else:
+            distancia_total = calcular_distancia_total(puntos)
+            data['UUID'].append(uuid_anterior)
+            data['Fecha'].append(fecha_anterior)
+            data['distancia recorrida'].append(distancia_total)
+            data['name'].append(df.loc[(df['UUID'] == uuid_anterior) & (df['Fecha'] == fecha_anterior), 'name'].iloc[0])   # <--------------------------- modificar 07/05/23
 
-    df_GPS_distancias_diurnas = distancias(df)
+            uuid_anterior = uuid_actual
+            lat_anterior = lat_actual
+            lon_anterior = lon_actual
+            fecha_anterior = fecha_actual
+            puntos = [(lat_actual, lon_actual)]
+        
+    # guardar último recorrido en el dataframe nuevo
+    distancia_total = calcular_distancia_total(puntos)
+    data['UUID'].append(uuid_anterior)
+    data['Fecha'].append(fecha_anterior)
+    data['distancia recorrida'].append(distancia_total)
+    data['name'].append(df.loc[(df['UUID'] == uuid_anterior) & (df['Fecha'] == fecha_anterior), 'name'].iloc[0])
 
-    if 'Unnamed: 0' in df1.columns:
-        df1.drop('Unnamed: 0', axis=1, inplace=True)
-    df_GPS_distancias_nocturna = distancias(df1)
+    df_recorrido_individual = pd.DataFrame(data)
+
+    if seleccion_funcion == 1:                                          # <---------- Este es el dataframe de los recorridos diurnos unitarios
+        # Retorna el DF con los recorridos diarios de cada GPS (diurno o nocturno, depende cuál DF sea el parámetro df de la función distancia)                                         
+        return df_recorrido_individual                                  # <---------- Este es el dataframe de los recorridos diurnos unitarios
+
+    else:
+        # Obtenr un DF con la fecha y el recorrido del UUID que más distancia recorrió ese día   
+
+        # Agrupar por fecha ,UUID y name y obtener el máximo de la columna "distancia recorrida".Obtiene el DF con el recorrido diario del rebaño
+        df_recorrido_max = df_recorrido_individual.groupby(['Fecha', 'name'])['distancia recorrida'].max().reset_index()
+    
+        return df_recorrido_max                                                                             
+
+
+# funcion que devuelve dataframe con las distancias diurnas, nocturnas y totales del UUID que más distancia recorrió ese día
+# también devulve dataframe con las distancias diarias individuales de cada GPS 
+
+def distancia_diaria(df, df1, seleccion_funcion):
+
+    df_GPS_distancias_diurnas = distancias(df, seleccion_funcion)
+    
+    df_GPS_distancias_nocturna = distancias(df1, seleccion_funcion)
 
     # Obtener tabla de distancia diaria total recorrida
     df_GPS_distancia_diaria = df_GPS_distancias_nocturna
@@ -711,6 +790,46 @@ def distancia_diaria(df, df1):
 
     return df_GPS_distancia_diaria 
 
-# ----------->> TERMINA CODIGO POR 'distancias_recorridas' <<-----------
 
+# ----------->> TERMINA FUNCIONES 'recorrido_diurno', "recorrido-nocturno" y "recorrido total" de todo el ganado <<-----------
+# ----------->> Recorrido individual de cada GPS por establecimiento (doble funcionalidad) <<-----------
+
+
+
+# ----------->> COMIENZA FUNCIONES 'tabla calendario' ## <<-----------
+
+# Crear el nuevo DataFrame 'calendar' con las columnas 'fecha', 'dia', 'mes', 'anio' y 'datetime'
+def calendario(df_tablahechos_final):    
+    calendar = pd.DataFrame({'Fecha': df_tablahechos_final['Fecha'],
+                            'Dia': pd.to_datetime(df_tablahechos_final['Fecha']).dt.day,
+                            'Mes': pd.to_datetime(df_tablahechos_final['Fecha']).dt.month,
+                            'Anio': pd.to_datetime(df_tablahechos_final['Fecha']).dt.year,
+                            })
+    calendar = calendar.drop_duplicates(subset=['Fecha'])
+    
+    return calendar
+
+
+# ----------->> TERMINA FUNCIONES 'tabla calendario' <<-----------
+
+
+
+# ----------->> COMIENZA FUNCIONES 'recorrido individual diario GPS" <<-----------
+
+# Calcula Dataframe para el recorrido individual de cada GPS
+def recorrido_solo_GPS(df_tablahechos_final):
+    #Dejo solo los GPS para mostrar recorrido en Dashboard
+    df_recorrido_solo_UUID = df_tablahechos_final[df_tablahechos_final.dataRowType != "BEACON"]
+    
+    # Convertir la columna "Hora" a formato datetime
+    #df_recorrido_solo_UUID["Hora"] = pd.to_datetime(df_recorrido_solo_UUID["Hora"])
+    df_recorrido_solo_UUID["Hora"] = pd.to_datetime(df_recorrido_solo_UUID["Hora"]).dt.time
+    
+    df_recorrido_solo_UUID.drop(columns=['Mac', 'RSSI'], inplace=True)
+    df_recorrido_solo_UUID = df_recorrido_solo_UUID.reset_index(drop=True)
+
+    return df_recorrido_solo_UUID
+
+
+# ----------->> TERMINA FUNCIONES 'recorrido individual diario GPS" <<-----------
 

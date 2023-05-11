@@ -1,12 +1,11 @@
 from infrastructure.conexiones import bson_to_dataframe
 import bson
 import pandas as pd
+from infrastructure.conexiones import *
+
 pd.options.mode.chained_assignment = None  # default='warn'
 
 
-def read_ith():
-    df_ith = bson_to_dataframe('settlementithcounts.bson')
-    return df_ith
 
 def read_settlements():
     df_settlements = bson_to_dataframe('settlements.bson')

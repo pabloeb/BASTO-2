@@ -174,6 +174,16 @@ Obtenidas las cuatro tablas, el equipo cuenta con la información necesaria para
 ![PHOTO-2023-04-27-23-40-41](https://user-images.githubusercontent.com/110254796/235064062-3f42533e-b439-4603-909f-f74fe8eed77e.jpg)
 
 
+## 4-API
+A partir de los datos transformados, resultado del proceso ETL, generamos una API para exponer esos datos al usuario.
+Esta se compone de varios endpoints, por ejemplo estos son algunos:
+* Cantidad de caravanas en un dia y establecimiento
+* Posiciones de caravanas en un dia y establecimiento
+* Horas de estress calórico en un período de fechas en un establecimiento
+
+La idea es que el usuario pueda seleccionar un establecimiento y una fecha, o un rango de fechas, y obtener la última información de los sensores del ganado registrados en la base de Bastó.
+
+
 Y eso es todo! Esperamos hayan disfrutado el recorrido.
 
 ## Muchas gracias!!

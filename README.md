@@ -150,6 +150,7 @@ Obtenidas las cuatro tablas, el equipo cuenta con la información necesaria para
 
 -	Power BI:
 •	Mediante la vinculación de las 4 tablas a una tabla calendario central, se conforma la estructura de trabajo para esta herramienta. La misma queda de esta manera:
+https://user-images.githubusercontent.com/110254796/235063353-6012a486-32e2-45e6-97bf-d37711b9a4eb.jpg
 
  ![Captura de pantalla 2023-04-25 a las 16 57 05](https://user-images.githubusercontent.com/110254796/235063353-6012a486-32e2-45e6-97bf-d37711b9a4eb.jpg)
 

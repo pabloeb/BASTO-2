@@ -68,3 +68,7 @@ def save_tranformation(df, name):
         
     # Guarda el archivo en la carpeta transformations
     df.to_csv(f'transformations/{name}.csv', index=False)
+
+def read_ith():
+    df_ith = bson_to_dataframe('settlementithcounts.bson')
+    return df_ith

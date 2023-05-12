@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from helpers.filter_classes import *
 from helpers.ith_functions import *
 from helpers.hechos_functions import *
+from helpers.distancias_functions import *
 from helpers.metadata import app
 from fastapi import Response
 
@@ -33,6 +34,20 @@ def get_beacon_pos(filtro: FiltroDiaEstablecimientoBeaconId):
 def get_beacon_ids_day(filtro: FiltroDiaEstablecimiento):
     
     return get_beacon_ids_by_day(filtro.date, filtro.settlement)
+
+
+@app.post("/get_distances_by_day",tags=["Distancias recorrida por el ganado en un establecimiento"], summary='Devuelve distancias recorridas, en metros, por el ganado en un establecimiento o null en caso de parametros invalidos')
+
+def get_distances_day(filtro: FiltroFechasEstablecimiento):
+    
+    return get_distances_by_day(filtro.start_date, filtro.end_date, filtro.settlement)
+
+
+@app.post("/get_individual_gps_distances_by_day",tags=["Distancias recorridas por un collar en un establecimiento"], summary='Devuelve distancias recorridas, en metros, de un collar en un establecimiento o null en caso de parametros invalidos')
+
+def get_gps_individual_distances_day(filtro: FiltroDiaEstablecimientoGpsId):
+    
+    return get_individual_gps_distances_by_day(filtro.date, filtro.settlement, filtro.gpsId)
 
 #ENDPOINTS ITH
 

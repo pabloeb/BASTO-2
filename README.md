@@ -83,7 +83,10 @@ Para solucionar ambos inconvenientes se implementaron algunas funciones que supl
 ### `Generción de geolocalización virtual de CARAVANAS:`  
 
  Se utilizó una función para geolocalización de las CARAVANAS diferente a la implementada por la empresa, entendiendo que la propuesta brinda mayor exactitud en el posicionamiento  en campo de los dispositivos.   
- Se genera una función que busca cuál fué el último GPS que transmitió previo a la emisión de la CARAVANA. En base a la localización de ese GPS, se fija la posición de la CARAVANA en forma aleatoria. Utilizando una función que calcula un círculo de un metro de radio con centro en las coordenadas del GPS, genera un angulo aleatorio posicionando un punto sobre el círculo, lo que introduce una dirección aleatoria.Luego, otra función de distancia basada en la proporcionalidad del valor de RSSI leido por el GPS , nos da la distancia en la que debe posicionarse la CARVANA del GPS. Para esta ultima función se utilizó una variante de la fórmula de Friis.
+ Se genera una función que busca cuál fué el último GPS que transmitió previo a la emisión de la CARAVANA. En base a la localización de ese GPS, se fija la posición de la CARAVANA en forma aleatoria. Utilizando una función que calcula un círculo de un metro de radio con centro en las coordenadas del GPS, genera un angulo aleatorio posicionando un punto sobre el círculo, lo que introduce una dirección aleatoria.Luego, otra función de distancia basada en la proporcionalidad del valor de RSSI leido por el GPS , nos da la distancia en la que debe posicionarse la CARVANA del GPS. Para esta ultima función se utilizó una variante de la fórmula de Friis.  
+ 
+ ![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/7d61b13b-8d94-4916-ae9a-b1c07bce502b)
+
 
 ** Cálculo de la función distancia en la geolocalización de las CARAVANAS:
 La potencia de transmisión de los dispositivos Bluetooth puede variar dependiendo del estándar Bluetooth utilizado y del diseño específico del dispositivo. En general, la mayoría de los dispositivos Bluetooth de Clase 2, que son los más comunes, tienen una potencia de transmisión máxima de alrededor de 2,5 mW o 4 dBm.
@@ -192,8 +195,9 @@ Obtenidas las siete tablas, el equipo cuenta con la información necesaria para 
 -	Power BI:
 •	Mediante la vinculación de las 7 tablas se conforma la estructura de trabajo para esta herramienta. La misma queda de esta manera:
 
+![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/fbda5b52-a9bc-4883-8b7a-858200fa37d9)
 
- ![Captura de pantalla 2023-04-25 a las 16 57 05](https://user-images.githubusercontent.com/110254796/235063353-6012a486-32e2-45e6-97bf-d37711b9a4eb.jpg)
+
 
 •	Si bien no fue lo primero en lo que se trabajó, acá mostramos en principio la portada, a fin de respetar el mismo orden que se lleva en la presentación final.
 
@@ -204,9 +208,11 @@ Obtenidas las siete tablas, el equipo cuenta con la información necesaria para 
  ![PHOTO-2023-04-27-15-08-41](https://user-images.githubusercontent.com/110254796/235063886-81f9c45b-b04f-4b7d-a5bc-c785c8a942e2.jpg)
 
 •	El segundo dashboard permite visualizar el mapa el recorrido completo diario de un animal(GPS) por fecha y por establecimiento.  
+![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/e7383207-b119-4c9b-b776-21706d14bf08)
 
 
 •	El tercer dashboard  permite visualizar las métricas del recorrido completo diario total, diurno, y nocturno de un animal(GPS) por fecha y por establecimiento.
+![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/1b839af1-3470-43d9-9d7a-75c5c850f949)
 
 
 
@@ -312,6 +318,9 @@ INFO:     Application startup complete.
 http://127.0.0.1:8000/docs
 
 Aparecera la consola de FastAPI, con la documentación y la posibilidad de hacer queries directamente en pantalla. 
+![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/fe80b650-403f-4346-bb22-3652ac86adfa)
+
+![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/5e69d9ea-a1d4-4e16-91f1-9e224a8f1ad6)
 
 
 Esperamos que hayan disfrutado el recorrido.

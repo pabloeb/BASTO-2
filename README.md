@@ -337,16 +337,13 @@ Esperamos que hayan disfrutado el recorrido.
 
 ### `Autores:`
 
-* Alejandro Busquet -> [Linkedin](https://www.linkedin.com/in/alejandro-busquet/ "Linkedin") - [Mail](algabu00@gmail.com/ "Mail")
+* Alejandro Busquet -> [Linkedin](https://www.linkedin.com/in/alejandro-busquet/ "Linkedin") - algabu00@gmail.com
 
+* Pablo Borioli -> [Linkedin](https://www.linkedin.com/in/pablo-borioli-2a03956a/ "Linkedin") - boriolip@yahoo.com.ar
 
-* Alejandro Busquet -> algabu00@gmail.com -> https://www.linkedin.com/in/alejandro-busquet/
+* Nicolás Montuori -> [Linkedin](https://www.linkedin.com/in/nicol%C3%A1s-montuori-5388b11b5/ "Linkedin") - nicomontuori@gmail.com
 
-* Pablo Borioli -> boriolip@yahoo.com.ar
-
-* Nicolás Montuori -> nicomontuori@gmail.com
-
-* Ricardo Ramos -> rikigermanramos@gmail.com
+* Ricardo Ramos -> [Linkedin](https://www.linkedin.com/in/ricardo-german-ramos/ "Linkedin") - rikigermanramos@gmail.com
 
 -------
 

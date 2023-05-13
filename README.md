@@ -337,7 +337,7 @@ Esperamos que hayan disfrutado el recorrido.
 
 ### `Autores:`
 
-* Alejandro Busquet -> algabu00@gmail.com
+* Alejandro Busquet -> algabu00@gmail.com -> https://www.linkedin.com/in/alejandro-busquet/
 
 * Pablo Borioli -> boriolip@yahoo.com.ar
 

@@ -84,6 +84,7 @@ Para solucionar ambos inconvenientes se implementaron algunas funciones que supl
 ### `Generación de geolocalización virtual de CARAVANAS:`  
 
  Se utilizó una función para geolocalización de las CARAVANAS diferente a la implementada por la empresa, entendiendo que la propuesta brinda mayor exactitud en el posicionamiento en campo de los dispositivos.   
+
 Se genera una función que busca cuál fué el último GPS que transmitió previo a la emisión de la CARAVANA. En base a la localización de ese GPS, se fija la posición de la CARAVANA en forma aleatoria. Utilizando una función que calcula un círculo de un metro de radio con centro en las coordenadas del GPS, genera un ángulo aleatorio posicionando un punto sobre el círculo, lo que introduce una dirección aleatoria. Luego, otra función de distancia basada en la proporcionalidad del valor del RSSI leido por el GPS, nos da la distancia en la que debe posicionarse la CARVANA del GPS. Para esta última función se utilizó una variante de la fórmula de Friis.  
  
  ![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/7d61b13b-8d94-4916-ae9a-b1c07bce502b)

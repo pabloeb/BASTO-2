@@ -211,11 +211,13 @@ Obtenidas las siete tablas, el equipo cuenta con la información necesaria para 
 
  ![PHOTO-2023-04-27-15-08-41](https://user-images.githubusercontent.com/110254796/235063886-81f9c45b-b04f-4b7d-a5bc-c785c8a942e2.jpg)
 
-•	El segundo dashboard permite visualizar el mapa el recorrido completo diario de un animal (GPS) por fecha y por establecimiento.  
+•	El segundo dashboard permite visualizar el mapa el recorrido completo diario de un animal (GPS) por fecha y por establecimiento.
+
 ![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/e7383207-b119-4c9b-b776-21706d14bf08)
 
 
 •	El tercer dashboard permite visualizar las métricas del recorrido completo diario total, diurno y nocturno, de un animal (GPS) por fecha y por establecimiento.
+
 ![image](https://github.com/pabloeb/PROYECTO-BASTO/assets/112908710/1b839af1-3470-43d9-9d7a-75c5c850f949)
 
 

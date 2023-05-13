@@ -93,13 +93,16 @@ Se genera una función que busca cuál fué el último GPS que transmitió previ
 ** Cálculo de la función distancia en la geolocalización de las CARAVANAS:
 La potencia de transmisión de los dispositivos Bluetooth puede variar dependiendo del estándar Bluetooth utilizado, y del diseño específico del dispositivo. En general, la mayoría de los dispositivos Bluetooth de Clase 2, que son los más comunes, tienen una potencia de transmisión máxima de alrededor de 2,5 mW o 4 dBm.
 Esto puede ser suficiente para la transmisión en campo abierto a distancias cortas de hasta unos pocos metros. Sin embargo, si se necesita una mayor distancia de transmisión o se encuentra en un entorno con obstáculos o interferencias de señales, puede ser necesario utilizar dispositivos Bluetooth de Clase 1, que tienen una potencia de transmisión máxima de alrededor de 100 mW o 20 dBm.
-La distancia entre el equipo receptor y el transmisor se calcula en forma aproximada a través de la fórmula de Friis:  
+La distancia entre el equipo receptor y el transmisor se calcula en forma aproximada a través de la fórmula de Friis: 
+
 d = 10^((RSSI(1) - RSSI(X) ) / (10 * n))  
+
 donde:
+
     • d: es la distancia entre el emisor y el receptor en metros.  
     • RSSI(1): es el valor de RSSI de calibración. Se coloca el Emisor a 1m del receptor y se mide el RSSI [dBm].  
     • RSSI (X): es el valor del RSSI medido en [dBm]  
-    • n: es el exponente de pérdida de camino, que depende de las características del entorno y obstáculos. En general, el valor de n varía entre 2 y 4.  
+    • n: exponente de pérdida de camino, que depende de las características del entorno y obstáculos. En general, el valor de n varía entre 2 y 4.  
 
 
 Sin embargo, como referencia, en un entorno de campo abierto sin obstáculos, se puede esperar una pérdida de señal de alrededor de 40 a 60 dB en distancias cortas (hasta 10 metros) para dispositivos Bluetooth de baja potencia (por ejemplo, Clase 2) y de alrededor de 60 a 80 dB en distancias más largas de hasta 100 metros para dispositivos de mayor potencia (por ejemplo, Clase 1). 

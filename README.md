@@ -337,7 +337,7 @@ Esperamos que hayan disfrutado el recorrido.
 
 ### `Autores:`
 
-* Alejandro Busquet -> [Linkedin] (https://www.linkedin.com/in/alejandro-busquet/ "Linkedin") - [Mail] (algabu00@gmail.com/ "Mail")
+* Alejandro Busquet -> [Linkedin](https://www.linkedin.com/in/alejandro-busquet/ "Linkedin") - [Mail](algabu00@gmail.com/ "Mail")
 
 
 * Alejandro Busquet -> algabu00@gmail.com -> https://www.linkedin.com/in/alejandro-busquet/
